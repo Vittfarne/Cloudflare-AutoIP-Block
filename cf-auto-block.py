@@ -19,7 +19,7 @@ cfEmail = ""
 cfAPIKey = ""
 
 # htaccess-file
-htaccessFile = ".htaccess"
+htaccessFile = "/home/username/public_html/.htaccess"
 
 # Note
 # Don't change after initial setup, this is used to only add/delete entries
@@ -58,9 +58,10 @@ for output in data["result"]:
 with open(htaccessFile, 'r') as f:
     filecont = f.readlines()
     for line in filecont:
-        if re.match("deny from [0-9]+", line):
+        if re.match("deny from [0-9]+", line, re.IGNORECASE):
             tempVar = line.split('\n')[0]
-            ips.append(tempVar.split('deny from ')[1])
+            denyReg = re.compile('deny from ', re.IGNORECASE).split(tempVar)[1]
+            ips.append(denyReg)
 
 toBeDeleted = [item for item in newVar if item not in ips]
 
